@@ -1,0 +1,15 @@
+# Copyright 2026 Morse Micro
+#
+# SPDX-License-Identifier: Apache-2.0
+
+menu "HaLow sta_connect Example Configuration"
+
+config WIFI_SSID
+	string "Wi-Fi SSID"
+	default "ThinkNode-G4_2a2d82"
+
+config WIFI_PSK
+	string "Wi-Fi Password"
+	default "elecrow.com"
+
+endmenu

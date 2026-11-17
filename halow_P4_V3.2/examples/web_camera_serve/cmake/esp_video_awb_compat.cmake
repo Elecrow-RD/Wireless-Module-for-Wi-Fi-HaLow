@@ -1,0 +1,66 @@
+# Local compatibility fixes for the pinned esp_video 1.4.1 dependency on P4 rev 3.x.
+# AWB stack configs must be initialized, and WBG must be applied before the first CSI frame.
+# Compile a patched build-directory copy; keep managed_components intact so
+# component integrity checks and fresh dependency downloads remain valid.
+function(p4_camera_fix_esp_video_awb)
+    if(NOT CONFIG_IDF_TARGET_ESP32P4 OR NOT CONFIG_ESP_VIDEO_ENABLE_ISP)
+        return()
+    endif()
+
+    idf_component_get_property(video_dir espressif__esp_video COMPONENT_DIR)
+    idf_component_get_property(video_lib espressif__esp_video COMPONENT_LIB)
+    set(original "${video_dir}/src/device/esp_video_isp_device.c")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${original}")
+    file(READ "${original}" source)
+    string(REPLACE "esp_isp_awb_config_t awb_config;"
+                   "esp_isp_awb_config_t awb_config = {0};" patched "${source}")
+    string(REGEX MATCHALL "esp_isp_awb_config_t awb_config = [{]0[}]"
+           initialized_configs "${patched}")
+    list(LENGTH initialized_configs initialized_count)
+    if(NOT initialized_count EQUAL 2 OR source STREQUAL patched)
+        message(FATAL_ERROR
+            "esp_video compatibility fix expects the two uninitialized AWB configs in 1.4.1. Revalidate this fix if updating esp_video.")
+    endif()
+    set(wbg_config "memset(&wbg_cfg, 0, sizeof(esp_isp_wbg_config_t));")
+    string(FIND "${patched}" "${wbg_config}" wbg_position)
+    if(wbg_position EQUAL -1)
+        message(FATAL_ERROR "esp_video compatibility fix expects one WBG config in 1.4.1. Revalidate this fix if updating esp_video.")
+    endif()
+    string(REPLACE "${wbg_config}"
+                   "${wbg_config}\n    wbg_cfg.flags.update_once_configured = 1;" patched "${patched}")
+    string(FIND "${patched}" "wbg_cfg.flags.update_once_configured = 1;" wbg_update_position)
+    if(wbg_update_position EQUAL -1)
+        message(FATAL_ERROR "Could not enable the initial WBG shadow register update")
+    endif()
+
+    set(output_dir "${CMAKE_BINARY_DIR}/p4_camera_compat")
+    set(output "${output_dir}/esp_video_isp_device.c")
+    file(MAKE_DIRECTORY "${output_dir}")
+    set(previous "")
+    if(EXISTS "${output}")
+        file(READ "${output}" previous)
+    endif()
+    if(NOT previous STREQUAL patched)
+        file(WRITE "${output}" "${patched}")
+    endif()
+
+    get_target_property(video_sources ${video_lib} SOURCES)
+    set(updated_sources)
+    set(replaced_count 0)
+    foreach(src IN LISTS video_sources)
+        get_filename_component(absolute_src "${src}" ABSOLUTE BASE_DIR "${video_dir}")
+        if(absolute_src STREQUAL original)
+            list(APPEND updated_sources "${output}")
+            math(EXPR replaced_count "${replaced_count} + 1")
+        else()
+            list(APPEND updated_sources "${src}")
+        endif()
+    endforeach()
+    if(NOT replaced_count EQUAL 1)
+        message(FATAL_ERROR "Could not uniquely replace the esp_video ISP source with the AWB compatibility fix")
+    endif()
+    set_property(TARGET ${video_lib} PROPERTY SOURCES "${updated_sources}")
+    message(STATUS "P4 camera: initialize AWB configs and apply initial WBG before first CSI frame (esp_video 1.4.1)")
+endfunction()
+
+p4_camera_fix_esp_video_awb()

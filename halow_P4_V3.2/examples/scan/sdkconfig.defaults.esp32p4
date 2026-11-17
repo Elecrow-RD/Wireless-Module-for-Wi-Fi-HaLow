@@ -1,0 +1,42 @@
+# Elecrow ESP32-P4 + FGH100MABMD, directly stacked as photographed.
+# PCB coordinates show J11.1 -> J4.7 (INT), J11.5 -> J4.3 (RESET).
+# J4 numbering runs opposite to J11; see README.esp32p4.md before rewiring.
+# Support ESP32-P4 revision 3.x devices, including the board's new v3.2 chip.
+CONFIG_ESP32P4_REV_MIN_300=y
+
+# Detected on the connected board in the boot log: 16384 KiB.
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+
+# Operating location confirmed by the user: United States.
+CONFIG_HALOW_COUNTRY_CODE="US"
+
+CONFIG_MM_RESET_N=9
+CONFIG_MM_WAKE=-1
+CONFIG_MM_BUSY=-1
+CONFIG_MM_SPI_SCK=8
+CONFIG_MM_SPI_MOSI=6
+CONFIG_MM_SPI_MISO=7
+CONFIG_MM_SPI_MISO_PULLUP=y
+CONFIG_MM_SPI_CS=27
+CONFIG_MM_SPI_IRQ=28
+
+# Retain the existing bounded SPI comparisons for the corrected board profile.
+# v8 adds a one-bit RX trial gated on repeatable chip ID and data CRC.
+CONFIG_MM_SPI_CLOCK_MHZ=10
+CONFIG_MM_TRANSPORT_DIAGNOSTICS=y
+CONFIG_MM_SPI_STARTUP_PROBE=y
+CONFIG_MM_SPI_GPIO_PROBE=y
+CONFIG_MM_SPI_RX_ALIGNMENT_TRIAL=y
+CONFIG_ESP_SYSTEM_USE_FRAME_POINTER=y
+# Keep the frame-pointer-enabled bootloader within the existing 0x8000 table offset.
+CONFIG_BOOTLOADER_LOG_LEVEL_WARN=y
+
+# The module label in the user's photograph reads FGH100MABMD (US).
+CONFIG_MM_CHIP_MM6108=y
+CONFIG_MM_BCF_FILE="bcf_fgh100mabmd.bin"
+
+# WAKEUP_IN is disconnected by R1 (NC) on the module schematic.
+# CONFIG_HALOW_PS_MODE is not set
+
+# Wi-Fi HaLow crypto support required on ESP32-P4.
+CONFIG_MBEDTLS_CMAC_C=y

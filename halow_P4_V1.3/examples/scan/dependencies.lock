@@ -1,0 +1,18 @@
+dependencies:
+  idf:
+    source:
+      type: idf
+    version: 5.5.3
+  morsemicro/halow:
+    dependencies:
+    - name: idf
+      version: '>=5.4.4,<6.0'
+    source:
+      path: E:\ElecrowWork\WiFI_Halow\esp-halow-main-p4-V1_3\halow
+      type: local
+    version: 2.11.2-esp32-2
+direct_dependencies:
+- morsemicro/halow
+manifest_hash: 7dce178ca6e546f134ee79a4e91f3e393ab3cb941a6480120dbee9d8efadaf07
+target: esp32p4
+version: 2.0.0

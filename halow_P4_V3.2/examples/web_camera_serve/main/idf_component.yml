@@ -1,0 +1,6 @@
+dependencies:
+  idf: ">=5.5.3,<6.0"
+  morsemicro/halow:
+    version: ^2.11.2-esp32-2
+    override_path: '../../../'
+  espressif/esp_video: '1.4.1'

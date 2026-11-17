@@ -1,0 +1,24 @@
+menu "Elecrow P4 HaLow camera"
+    config P4_CAMERA_SDA
+        int "SC2336 SCCB SDA GPIO"
+        default 12
+    config P4_CAMERA_SCL
+        int "SC2336 SCCB SCL GPIO"
+        default 13
+    config P4_CAMERA_MAX_WIDTH
+        int "JPEG maximum width (height aligned to 16 pixels)"
+        range 160 1280
+        default 320
+    config P4_CAMERA_JPEG_QUALITY
+        int "JPEG quality"
+        range 10 95
+        default 45
+    config P4_CAMERA_FPS
+        int "Maximum MJPEG frames per second"
+        range 1 15
+        default 5
+    config P4_CAMERA_SD
+        bool "Enable SD card photo saving (J5, 1-bit SDMMC)"
+        default y
+endmenu
+

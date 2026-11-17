@@ -1,0 +1,43 @@
+dependencies:
+  espressif/iperf:
+    component_hash: f4c2beaae50478a626995130d2611c628b7a568cd0799022758c05658928410c
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.3'
+    source:
+      registry_url: https://components.espressif.com
+      type: service
+    version: 0.1.4
+  espressif/iperf-cmd:
+    component_hash: 1bb639fa395a34c72a1dacf53342c798c4c7d56731b370c5efc75063e831bf32
+    dependencies:
+    - name: espressif/iperf
+      registry_url: https://components.espressif.com
+      require: private
+      version: =0.1.4
+    - name: idf
+      require: private
+      version: '>=4.3'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 0.1.4
+  idf:
+    source:
+      type: idf
+    version: 5.5.3
+  morsemicro/halow:
+    dependencies:
+    - name: idf
+      version: '>=5.4.4,<6.0'
+    source:
+      path: E:\ElecrowWork\WiFI_Halow\esp-halow-main\halow
+      type: local
+    version: 2.11.2-esp32-2
+direct_dependencies:
+- espressif/iperf-cmd
+- morsemicro/halow
+manifest_hash: 433e6371c3d06f439249d8b309da8928ac556aafe3565fa46f94ef65a86ee1e2
+target: esp32p4
+version: 2.0.0
