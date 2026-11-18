@@ -41,7 +41,9 @@ idf.py --version
 
 The output should report ESP-IDF v5.5.3. Before the first build, make sure Python, CMake, Ninja, and `idf.py` all come from the ESP-IDF v5.5.3 environment rather than another system installation. Other ESP-IDF versions are not validated by this tutorial.
 
-Keep the repository path reasonably short. The commands below use `F:\wiki\~P4+halow-wifi` as an example; replace it with the actual path on your computer.
+Keep the repository path reasonably short. **All paths shown in this tutorial are examples from the author's local computer. Customers must replace them with the path where they cloned or extracted this repository.** The commands below use `F:\halow-wifi` as a placeholder only.
+
+For example, if your repository is located at `C:\Users\YourName\Documents\halow-wifi`, replace every `F:\halow-wifi` prefix in the commands with `C:\Users\YourName\Documents\halow-wifi`. Likewise, replace `COM9` with the actual COM port assigned to your P4 board.
 
 ## 3. Build the minimal scan example
 
@@ -50,7 +52,8 @@ Keep the repository path reasonably short. The commands below use `F:\wiki\~P4+h
 ### P4 rev1.3
 
 ```powershell
-cd F:\wiki\~P4+halow-wifi\halow_P4_V1.3\examples\scan
+cd F:\halow-wifi\halow_P4_V1.3\examples\scan
+# Replace the path above with your own repository path.
 idf.py set-target esp32p4
 idf.py build
 ```
@@ -58,7 +61,8 @@ idf.py build
 ### P4 rev3.2
 
 ```powershell
-cd F:\wiki\~P4+halow-wifi\halow_P4_V3.2\examples\scan
+cd F:\halow-wifi\halow_P4_V3.2\examples\scan
+# Replace the path above with your own repository path.
 idf.py set-target esp32p4
 idf.py build
 ```
@@ -69,7 +73,7 @@ After the build, the firmware is in the example's `build` directory. A successfu
 
 ## 4. Flash and view the log
 
-Connect the P4 to the computer over USB, identify its serial port (for example, `COM9`), and run this in the same example directory:
+Connect the P4 to the computer over USB, identify its serial port (the examples use `COM9` as a placeholder), and run this in the same example directory. Replace `COM9` with your actual port, such as `COM5` or `/dev/ttyUSB0` where applicable:
 
 ```powershell
 idf.py -p COM9 flash monitor
@@ -84,8 +88,8 @@ If the log contains `All hardware SPI startup probes failed`, do not treat that 
 `sta_connect` verifies WPA3-SAE association, DHCP, and UDP transmission. Change the SSID, password, and country code with `idf.py menuconfig`:
 
 ```powershell
-cd F:\wiki\~P4+halow-wifi\halow_P4_V1.3\examples\sta_connect
-# For V3.2, use the same path under halow_P4_V3.2
+cd F:\halow-wifi\halow_P4_V1.3\examples\sta_connect
+# Replace the path above with your own repository path. For V3.2, use the same path under halow_P4_V3.2.
 idf.py set-target esp32p4
 idf.py menuconfig
 idf.py build
@@ -101,8 +105,8 @@ The [Elecrow ThinkNode-G4 Wi-Fi HaLow Gateway](https://www.elecrow.com/thinknode
 `web_camera_serve` is intended for a P4 board with an SC2336 MIPI-CSI camera, SD card, and HaLow module. It starts the camera and HTTP service after obtaining a HaLow IP address.
 
 ```powershell
-cd F:\wiki\~P4+halow-wifi\halow_P4_V1.3\examples\web_camera_serve
-# For V3.2, use the same path under halow_P4_V3.2
+cd F:\halow-wifi\halow_P4_V1.3\examples\web_camera_serve
+# Replace the path above with your own repository path. For V3.2, use the same path under halow_P4_V3.2.
 idf.py set-target esp32p4
 idf.py menuconfig
 idf.py build
